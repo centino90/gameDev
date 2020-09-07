@@ -15,9 +15,9 @@ Scoreboard.prototype.show = function(score) {
 
     bmd = this.game.add.bitmapData(this.game.width, this.game.height);
     bmd.ctx.fillStyle = '#000';
-    bmd.ctx.fillRect(0,0,this.game.width,this.game.height);
+    bmd.ctx.fillRect(0,0,this.game.width, this.game.height);
 
-    background = this.game.add.sprite(0,0, bmd);
+    background = this.game.add.sprite(0, 0, bmd);
     background.alpha = 0.5;
 
     this.add(background);
@@ -50,13 +50,12 @@ Scoreboard.prototype.show = function(score) {
     this.add(startText);
 
     if(isNewHighScore) {
-        newHighScoreText = this.game.add.bitmapData(0,100,'minecraftia','New High Score!', 12);
-        newHighScoreText.tint = 0x4ebef7;
-        newHighScoreText.x = gameoverText.x + gameoverText.textWidth + 40;
-        newHighScoreText.angle = 45;
-        this.add(newHighScoreText);
+    highScoreText = this.game.add.bitmapText(0,250,'minecraftia', 'Your New High Score: ' + highscore, 36);
+    highScoreText.x = this.game.width / 2 - (highScoreText.textWidth / 2);
+    highScoreText.tint = 0x4ebef7;
+    this.update(highScoreText);       
     }
-
+    
     this.game.add.tween(this).to({y: 0}, 1000, Phaser.Easing.Bounce.Out, true);
 
     this.game.input.onDown.addOnce(this.restart, this);

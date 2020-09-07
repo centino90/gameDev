@@ -121,7 +121,7 @@ ZenvaRunner.Game.prototype = { //extend the Game method prototype
         player.body.velocity.y = -200; //bounce the player when hit the ground
     },
     coinHit: function(player,coin) {
-        this.score++; //increase our score
+        this.score = this.score + 3000; //increase our score
         coin.kill(); // will hide the coin
         this.scoreText.text = 'Score: ' + this.score // will update the score coin
     },
