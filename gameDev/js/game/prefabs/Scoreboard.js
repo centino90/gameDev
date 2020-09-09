@@ -50,10 +50,14 @@ Scoreboard.prototype.show = function(score) {
     this.add(startText);
 
     if(isNewHighScore) {
-    highScoreText = this.game.add.bitmapText(0,250,'minecraftia', 'Your New High Score: ' + highscore, 36);
+    highScoreText = this.game.add.bitmapText(600,215,'minecraftia', 'NEW ', 36);
+    highScoreText.tint = 0xf93b3b;
+    highScoreText.angle = -4;
+    highScoreText = this.game.add.bitmapText(0,250,'minecraftia', 'Your High Score: ' + highscore, 36);
     highScoreText.x = this.game.width / 2 - (highScoreText.textWidth / 2);
     highScoreText.tint = 0x4ebef7;
-    this.update(highScoreText);       
+    highScoreText.x.backgroundColor = "#fff";
+    this.add(highScoreText);       
     }
     
     this.game.add.tween(this).to({y: 0}, 1000, Phaser.Easing.Bounce.Out, true);

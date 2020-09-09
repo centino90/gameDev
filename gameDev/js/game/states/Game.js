@@ -45,6 +45,13 @@ ZenvaRunner.Game.prototype = { //extend the Game method prototype
 
         // add text to upper left with font details
         this.scoreText = this.game.add.bitmapText(10,10,'minecraftia','Score: 0',24);
+
+        // add audio
+        this.jetSound = this.game.add.audio('rocket');
+        this.coinSound = this.game.add.audio('coin');
+        this.deathSound = this.game.add.audio('death');
+        this.gameMusic = this.game.add.audio('gameMusic');
+        this.gameMusic.play('',0, true);
         
     },
     update: function() {
@@ -86,7 +93,11 @@ ZenvaRunner.Game.prototype = { //extend the Game method prototype
 
     },
     shutdown: function() {
-
+        this.coins.destroy();
+        this.enemies.destroy();
+        this.score = 0;
+        this.coinTimer = 0;
+        this.enemyTimer = 0;
     },
 
     // recycle coin and add to coin group
@@ -121,13 +132,32 @@ ZenvaRunner.Game.prototype = { //extend the Game method prototype
         player.body.velocity.y = -200; //bounce the player when hit the ground
     },
     coinHit: function(player,coin) {
-        this.score = this.score + 3000; //increase our score
+        this.score = this.score + 100000; //increase our score
+        this.coinSound.play(); //play the coin sound when player hits coin, no need to loop
         coin.kill(); // will hide the coin
         this.scoreText.text = 'Score: ' + this.score // will update the score coin
+
+        // add animation
+        var dummyCoin = new Coin(this.game, coin.x, coin.y) //get the position of the coins and save it to dummyCoin
+        this.game.add.existing(dummyCoin);
+
+        dummyCoin.animations.play('spin',40,true); //animation when the coin get hit, "animation name", 'speed', 'loop'
+
+        // transition to upper left when the coin get hit
+        var scoreTween = this.game.add.tween(dummyCoin).to({x: 50, y: 50}, 300, Phaser.Easing.Linear.NONE, true);
+
+        scoreTween.onComplete.add(function() {
+            dummyCoin.destroy(); //destroy coin
+            this.scoreText.text = 'Score: ' + this.score; //show the score when the coin flies towards upper left
+        }, this);
+        
     },
     enemyHit: function(player,enemy) {
         player.kill(); //will kill the player
         enemy.kill(); // will kill the enemy
+
+        this.deathSound.play(); //play the death sound when player hits enemy, no need to loop
+        this.gameMusic.stop(); // end the game music
 
         this.ground.stopScroll(); // will stop ground from scrolling
         this.background.stopScroll(); // will stop background from scrolling
